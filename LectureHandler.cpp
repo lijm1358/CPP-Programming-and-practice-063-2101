@@ -32,7 +32,7 @@ void LectureHandler::addLecture()
 	cout << "과목 추가 완료";
 }
 
-void LectureHandler::showAllLecture()
+void LectureHandler::showAllLecture() const
 {
 	int i;
 	for(i=0; i<lectureCount; i++)

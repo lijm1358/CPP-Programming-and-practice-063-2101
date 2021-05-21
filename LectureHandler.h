@@ -14,7 +14,7 @@ private:
 public:
 	LectureHandler() : lectureCount(0) {};
 	void addLecture();
-	void showAllLecture();
+	void showAllLecture() const;
 	void changeLectureInfo(Lecture&);
 	Lecture* findLecture(int) const;
 	Lecture* findLecture(char*) const;
