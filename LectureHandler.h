@@ -1,8 +1,6 @@
 #pragma once
 #pragma warning (disable:4996)
 
-#include <iostream>
-#include <cstring>
 #include "Lecture.h"
 
 class LectureHandler
