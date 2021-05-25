@@ -1,4 +1,6 @@
 ﻿#include <iostream>
+#include <cctype>
+#include <string>
 #include "LectureHandler.h"
 
 #define MAX_STRING_LENGTH 100
@@ -13,20 +15,27 @@ void LectureHandler::addLecture()
 	char lecturer[MAX_STRING_LENGTH];
 	char room[MAX_STRING_LENGTH];
 	int limited;
-	double time;
+	string time;
+	char* time_cp;
 
 	//Lecture(const char* name, const char* lecturer, const char* room, int code, double time, int limited);
-	cout << "이름 : ";
+	cout << "강의명 : ";
 	cin >> name;
-	cout << "교수 : ";
+	do
+	{
+		cout << "강의 시간 : ";
+		cin >> time;
+	} while (checkTimeStringFormat(time) != 0);
+	time_cp = time.c_str();
+
+	cout << "수강 제한 인원 : ";
+	cin >> limited;
+	cout << "교수명 : ";
 	cin >> lecturer;
 	cout << "강의실 : ";
 	cin >> room;
-	cout << "강의 시간 : ";
-	cin >> time;
-	cout << "최대 수강 인원 : ";
-	cin >> limited;
-	lectureList[lectureCount] = new Lecture(name, lecturer, room, lectureCodeSequence, time, limited);
+
+	lectureList[lectureCount] = new Lecture(name, lecturer, room, lectureCodeSequence, time_cp, limited);
 	lectureCodeSequence++;
 	lectureCount++;
 	cout << "과목 추가 완료";
@@ -35,7 +44,7 @@ void LectureHandler::addLecture()
 void LectureHandler::showAllLecture() const
 {
 	int i;
-	for(i=0; i<lectureCount; i++)
+	for (i = 0; i < lectureCount; i++)
 	{
 		lectureList[i]->LectureAllInfoPrint();
 	}
@@ -57,43 +66,43 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 	cin >> changeCode;
 	switch (changeCode)
 	{
-		case 1:
-			cout << "강의 이름 : ";
-			cin >> lectName;
-			lect.ChangeLectureName(lectName);
-			cout << "변경 완료" << endl;
-			lect.LectureAllInfoPrint();
-			break;
-		case 2:
-			cout << "교수명 : ";
-			cin >> profName;
-			lect.ChangeLecturer(profName);
-			cout << "변경 완료" << endl;
-			lect.LectureAllInfoPrint();
-			break;
-		case 3:
-			cout << "강의실 : ";
-			cin >> roomNum;
-			lect.ChangeLectureRoom(roomNum);
-			cout << "변경 완료" << endl;
-			lect.LectureAllInfoPrint();
-			break;
-		case 4:
-			cout << "강의 시간 : ";
-			cin >> lectureTime;
-			lect.ChangeLectureTime(lectureTime);
-			cout << "변경 완료 " << endl;
-			lect.LectureAllInfoPrint();
-			break;
-		case 5:
-			cout << "최대 수강 인원 : ";
-			cin >> maxStudent;
-			lect.ChangeLimitedNum(maxStudent);
-			cout << "변경 완료 " << endl;
-			lect.LectureAllInfoPrint();
-			break;
-		default:
-			cout << "잘못된 코드입니다." << endl;
+	case 1:
+		cout << "강의 이름 : ";
+		cin >> lectName;
+		lect.ChangeLectureName(lectName);
+		cout << "변경 완료" << endl;
+		lect.LectureAllInfoPrint();
+		break;
+	case 2:
+		cout << "교수명 : ";
+		cin >> profName;
+		lect.ChangeLecturer(profName);
+		cout << "변경 완료" << endl;
+		lect.LectureAllInfoPrint();
+		break;
+	case 3:
+		cout << "강의실 : ";
+		cin >> roomNum;
+		lect.ChangeLectureRoom(roomNum);
+		cout << "변경 완료" << endl;
+		lect.LectureAllInfoPrint();
+		break;
+	case 4:
+		cout << "강의 시간 : ";
+		cin >> lectureTime;
+		lect.ChangeLectureTime(lectureTime);
+		cout << "변경 완료 " << endl;
+		lect.LectureAllInfoPrint();
+		break;
+	case 5:
+		cout << "최대 수강 인원 : ";
+		cin >> maxStudent;
+		lect.ChangeLimitedNum(maxStudent);
+		cout << "변경 완료 " << endl;
+		lect.LectureAllInfoPrint();
+		break;
+	default:
+		cout << "잘못된 코드입니다." << endl;
 	}
 }
 
@@ -102,7 +111,7 @@ Lecture* LectureHandler::findLecture(int code) const
 	int i;
 	for (i = 0; i < lectureCount; i++)
 	{
-		if(lectureList[i]->GetLectureCode() == code)
+		if (lectureList[i]->GetLectureCode() == code)
 		{
 			return lectureList[i];
 		}
@@ -130,4 +139,68 @@ LectureHandler::~LectureHandler()
 	{
 		delete[] lectureList[i];
 	}
+}
+
+int LectureHandler::checkTimeStringFormat(string time)
+{
+	if (time.length() != 9)
+	{
+		cout << "잘못된 시간 형식입니다." << endl;
+		return 1;
+	}
+	else if (time.at(4) != '~')
+	{
+		cout << "잘못된 시간 형식입니다." << endl;
+		return 1;
+	}
+	else
+	{
+		for (unsigned int i = 0; i < time.length(); i++)
+		{
+			if ( !isdigit(time.at(i)) && (i != 4))
+			{
+				cout << "시간 입력 부분에 숫자가 입력되어야 합니다." << endl;
+				return 2;
+			}
+		}
+	}
+
+	if ( (stringToInteger(time.substr(0, 2)) < 0) || (stringToInteger(time.substr(0, 2)) > 23) ||
+		stringToInteger(time.substr(5, 2)) < 0 || stringToInteger(time.substr(5, 2)) > 23 ||
+		stringToInteger(time.substr(2, 2)) < 0 || stringToInteger(time.substr(2, 2)) > 59 ||
+		stringToInteger(time.substr(2, 2)) < 0 || stringToInteger(time.substr(7, 2)) > 59)
+	{
+		cout << "시간 범위가 잘못되었습니다." << endl;
+		return 3;
+	}
+	else if( stringToInteger(time.substr(0,4)) >= stringToInteger(time.substr(5,4)) )
+	{
+		cout << "시간 순서가 올바르지 않습니다." << endl;
+		return 4;
+	}
+	return 0;
+}
+
+int stringToInteger(char* str)
+{
+	int ret = 0;
+	int mul = 1;
+	for (int i = strlen(str) - 1; i >= 0; i--)
+	{
+		ret += (*(str + i)) * mul;
+		mul *= 10;
+	}
+	return ret;
+}
+
+int stringToInteger(string str)
+{
+	int ret = 0;
+	int mul = 1;
+	for (int i = str.length() - 1; i >= 0; i--)
+	{
+		ret += (str.at(i) - '0') * mul;
+		mul *= 10;
+	}
+	return ret;
 }
