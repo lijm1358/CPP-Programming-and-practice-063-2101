@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int stringToInteger(char*);		//
+int stringToInteger(char*);		// 입력받은 문자열을 정수로 변환
 int stringToInteger(string);	// 입력받은 문자열을 정수로 변환
 
 class LectureHandler

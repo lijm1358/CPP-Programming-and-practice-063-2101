@@ -25,7 +25,7 @@ void LectureHandler::addLecture()
 	{
 		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
 		cin >> time;
-	} while (checkTimeStringFormat(time) != 0);
+	} while (checkTimeStringFormat(time) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
 	time_cp = time.c_str();
 
 	cout << "수강 제한 인원 : ";
@@ -143,6 +143,15 @@ LectureHandler::~LectureHandler()
 
 int LectureHandler::checkTimeStringFormat(string time)
 {
+	/**************************************************************************************
+	 * 입력받은 강의 시간 string을 확인, 정해진 형식 및 규칙을 따르는지 확인
+	 * 현재 클래스의 addLecture()에서만 사용할 함수이므로 private선언.
+	 * 
+	 * 1. HHMM~HHMM 입력이 아닌, 다른 길이의 문자열이나 가운데 문자 ~를 받지 않으면 1을 return
+	 * 2. H,M이 숫자가 아니면 2를 return
+	 * 3. 0<=HH<=23, 0<=MM<=59범위를 만족하지 않으면 3를 return
+	 * 4. 앞에 입력한 시간보다 뒤에 입력한 시간이 더 앞서있으면 4를 return
+	 * ************************************************************************************/
 	if (time.length() != 9)
 	{
 		cout << "잘못된 시간 형식입니다." << endl;
