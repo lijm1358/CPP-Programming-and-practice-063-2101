@@ -23,7 +23,7 @@ void LectureHandler::addLecture()
 	cin >> name;
 	do
 	{
-		cout << "강의 시간 : ";
+		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
 		cin >> time;
 	} while (checkTimeStringFormat(time) != 0);
 	time_cp = time.c_str();
