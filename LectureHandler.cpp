@@ -24,7 +24,7 @@ void LectureHandler::addLecture()
 	cin >> name;
 	do
 	{
-		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
+		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): "; 
 		cin >> time;
 	} while (checkTimeStringFormat(time) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
 	time_cp = new char[time.length() + 1];
@@ -96,7 +96,7 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 	case 4:
 		cout << "강의 시간 : ";
 		cin >> lectureTime;
-		//lect.ChangeLectureTime(lectureTime);
+		lect.ChangeLectureTime(lectureTime);
 		cout << "변경 완료 " << endl;
 		lect.LectureAllInfoPrint();
 		break;
@@ -143,7 +143,7 @@ LectureHandler::~LectureHandler()
 	int i;
 	for (i = 0; i < lectureCount; i++)
 	{
-		delete[] lectureList[i];
+		delete lectureList[i];
 	}
 }
 
