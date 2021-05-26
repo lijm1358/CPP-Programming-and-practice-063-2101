@@ -19,6 +19,7 @@ void LectureHandler::addLecture()
 	char* time_cp;
 
 	//Lecture(const char* name, const char* lecturer, const char* room, int code, double time, int limited);
+	cout << "--------------------------" << endl;
 	cout << "강의명 : ";
 	cin >> name;
 	do
@@ -26,7 +27,8 @@ void LectureHandler::addLecture()
 		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
 		cin >> time;
 	} while (checkTimeStringFormat(time) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
-	time_cp = time.c_str();
+	time_cp = new char[time.length() + 1];
+	strcpy(time_cp, time.c_str());
 
 	cout << "수강 제한 인원 : ";
 	cin >> limited;
@@ -38,11 +40,15 @@ void LectureHandler::addLecture()
 	lectureList[lectureCount] = new Lecture(name, lecturer, room, lectureCodeSequence, time_cp, limited);
 	lectureCodeSequence++;
 	lectureCount++;
-	cout << "과목 추가 완료";
+	cout << endl << "과목 추가 완료" << endl;
+	cout << "--------------------------" << endl;
+	delete[] time_cp;
 }
 
 void LectureHandler::showAllLecture() const
 {
+	cout << "--------------------------" << endl;
+	cout << "강의 목록" << endl;
 	int i;
 	for (i = 0; i < lectureCount; i++)
 	{
@@ -90,7 +96,7 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 	case 4:
 		cout << "강의 시간 : ";
 		cin >> lectureTime;
-		lect.ChangeLectureTime(lectureTime);
+		//lect.ChangeLectureTime(lectureTime);
 		cout << "변경 완료 " << endl;
 		lect.LectureAllInfoPrint();
 		break;
@@ -146,7 +152,7 @@ int LectureHandler::checkTimeStringFormat(string time)
 	/**************************************************************************************
 	 * 입력받은 강의 시간 string을 확인, 정해진 형식 및 규칙을 따르는지 확인
 	 * 현재 클래스의 addLecture()에서만 사용할 함수이므로 private선언.
-	 * 
+	 *
 	 * 1. HHMM~HHMM 입력이 아닌, 다른 길이의 문자열이나 가운데 문자 ~를 받지 않으면 1을 return
 	 * 2. H,M이 숫자가 아니면 2를 return
 	 * 3. 0<=HH<=23, 0<=MM<=59범위를 만족하지 않으면 3를 return
@@ -166,7 +172,7 @@ int LectureHandler::checkTimeStringFormat(string time)
 	{
 		for (unsigned int i = 0; i < time.length(); i++)
 		{
-			if ( !isdigit(time.at(i)) && (i != 4))
+			if (!isdigit(time.at(i)) && (i != 4))
 			{
 				cout << "시간 입력 부분에 숫자가 입력되어야 합니다." << endl;
 				return 2;
@@ -174,7 +180,7 @@ int LectureHandler::checkTimeStringFormat(string time)
 		}
 	}
 
-	if ( (stringToInteger(time.substr(0, 2)) < 0) || (stringToInteger(time.substr(0, 2)) > 23) ||
+	if ((stringToInteger(time.substr(0, 2)) < 0) || (stringToInteger(time.substr(0, 2)) > 23) ||
 		stringToInteger(time.substr(5, 2)) < 0 || stringToInteger(time.substr(5, 2)) > 23 ||
 		stringToInteger(time.substr(2, 2)) < 0 || stringToInteger(time.substr(2, 2)) > 59 ||
 		stringToInteger(time.substr(2, 2)) < 0 || stringToInteger(time.substr(7, 2)) > 59)
@@ -182,7 +188,7 @@ int LectureHandler::checkTimeStringFormat(string time)
 		cout << "시간 범위가 잘못되었습니다." << endl;
 		return 3;
 	}
-	else if( stringToInteger(time.substr(0,4)) >= stringToInteger(time.substr(5,4)) )
+	else if (stringToInteger(time.substr(0, 4)) >= stringToInteger(time.substr(5, 4)))
 	{
 		cout << "시간 순서가 올바르지 않습니다." << endl;
 		return 4;
