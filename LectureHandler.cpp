@@ -9,7 +9,7 @@ using namespace std;
 
 int LectureHandler::lectureCodeSequence = 1;
 
-void LectureHandler::addLecture()
+void LectureHandler::addLecture(professor& prof)
 {
 	char name[MAX_STRING_LENGTH];
 	char lecturer[MAX_STRING_LENGTH];
@@ -32,8 +32,7 @@ void LectureHandler::addLecture()
 
 	cout << "수강 제한 인원 : ";
 	cin >> limited;
-	cout << "교수명 : ";
-	cin >> lecturer;
+	strcpy(lecturer, prof.get_name());
 	cout << "강의실 : ";
 	cin >> room;
 

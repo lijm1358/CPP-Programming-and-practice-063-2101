@@ -20,7 +20,7 @@ private:
 	int checkTimeStringFormat(string);	// 강의 시간을 입력받았을 때, 해당 시간이 형식(HHMM~HHMM)에 맞는지 확인
 public:
 	LectureHandler() : lectureCount(0) {};
-	void addLecture(void);
+	void addLecture(professor& prof);
 	void showAllLecture() const;
 	void changeLectureInfo(Lecture&);
 	void showLectureByProfName(char*) const;
