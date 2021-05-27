@@ -10,3 +10,4 @@
   * <code>void changeLectureInfo()(Lecture&)</code> : Lecture 클래스 인스턴스를 받아서, 해당 lecture의 정보 변경. 변경할 정보 등의 선택은 함수 내에서 이루어짐.
   * <code>Lecture* findLecture(int) const</code> : 강의코드를 받아서, 해당 강의코드와 일차하는 lecture 클래스 반환. 일치하는 강의가 없으면 NULL반환.
   * <code>Lecture* findLecture(char*) const</code> : 강의명을 받아서, 해당 강의명과 일치하는 lecture 클래스 반환. 일치하는 강의가 없으면 NULL반환. 
+  * <code>void showLectureByProfName(char*) const;</code> : 교수명을 받아서, 해당 교수명과 일치하는 강의들을 출력.
