@@ -1,5 +1,6 @@
 # CPP-Programming-and-practice-063-2101
 -------
+## class LectureHandler
 * ### 멤버변수 목록
   * <code>Lecture* lectureList</code> : Lecture들을 저장할 수 있는 배열
   * <code>int lectureCount</code> : lectureList에 저장되어있는 lecture들의 수
@@ -11,3 +12,11 @@
   * <code>Lecture* findLecture(int) const</code> : 강의코드를 받아서, 해당 강의코드와 일차하는 lecture 클래스 반환. 일치하는 강의가 없으면 NULL반환.
   * <code>Lecture* findLecture(char*) const</code> : 강의명을 받아서, 해당 강의명과 일치하는 lecture 클래스 반환. 일치하는 강의가 없으면 NULL반환. 
   * <code>void showLectureByProfName(char*) const;</code> : 교수명을 받아서, 해당 교수명과 일치하는 강의들을 출력.
+## function.cpp
+### main()에서 호출될 함수들 목록(LectureHandler를 인자로 받는 것은 실행 테스트 때문, 변경 가능)
+* ### 함수 목록
+  * <code>AddLecture(LectureHandler& lectHdl, professor& prof)</code> : 강의 추가
+  * <code>ShowAllLecture(LectureHandler& lectHdl)</code> : 모든 강의 정보 출력
+  * <code>ChangeLectureInfo(LectureHandler& lectHdl, professor& prof)</code> : 인자로 전달받은 professor 클래스가 생성한 Lecture클래스들의 정보 변경
+  * <code>AddGrade(LectureHandler& lectHdl, UserHandler& userHdl, professor& prof)</code> : 인자로 전달받은 professor클래스가 생성한 강의, 전체 강의 목록, 전체 사용자 목록 등의 정보를 이용해 학생들의 성적 등록.
+
