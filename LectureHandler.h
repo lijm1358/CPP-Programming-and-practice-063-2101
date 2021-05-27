@@ -3,7 +3,6 @@
 
 #include <string>
 #include "Lecture.h"
-#include "User.h"
 
 using namespace std;
 
@@ -21,7 +20,6 @@ private:
 public:
 	LectureHandler() : lectureCount(0) {};
 	void addLecture();
-	void addLecture(professor& prof);	// 임시 오버로딩 함수
 	void showAllLecture() const;
 	void changeLectureInfo(Lecture&);
 	void showLectureByProfName(char*) const;
