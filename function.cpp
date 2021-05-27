@@ -5,9 +5,9 @@
 
 using namespace std;
 
-void AddLecture(LectureHandler& lectHdl)
+void AddLecture(LectureHandler& lectHdl, professor& prof)
 {
-	lectHdl.addLecture();
+	lectHdl.addLecture(prof);
 }
 
 void ShowAllLecture(LectureHandler& lectHdl)
