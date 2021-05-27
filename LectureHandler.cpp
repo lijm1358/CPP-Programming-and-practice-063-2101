@@ -112,6 +112,18 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 	}
 }
 
+void LectureHandler::showLectureByProfName(char* profName) const
+{
+	int i;
+	for (i = 0; i < lectureCount; i++)
+	{
+		if (strcmp(lectureList[i]->GetLecturer(), profName) == 0)
+		{
+			lectureList[i]->LectureAllInfoPrint();
+		}
+	}
+}
+
 Lecture* LectureHandler::findLecture(int code) const
 {
 	int i;
