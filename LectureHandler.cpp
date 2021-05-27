@@ -24,7 +24,7 @@ void LectureHandler::addLecture()
 	cin >> name;
 	do
 	{
-		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): "; 
+		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
 		cin >> time;
 	} while (checkTimeStringFormat(time) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
 	time_cp = new char[time.length() + 1];
@@ -63,11 +63,12 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 	char lectName[MAX_STRING_LENGTH];
 	char profName[MAX_STRING_LENGTH];
 	char roomNum[MAX_STRING_LENGTH];
-	double lectureTime;
+	char lectureTime[MAX_STRING_LENGTH];
 	int maxStudent;
 
 	lect.LectureAllInfoPrint();
 
+	cout << "--------------------------" << endl;
 	cout << "바꿀 강의 정보 (1. 강의이름 2. 교수 3. 강의실 4. 강의 시간 5. 최대 수강 인원) : ";
 	cin >> changeCode;
 	switch (changeCode)
@@ -94,8 +95,11 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 		lect.LectureAllInfoPrint();
 		break;
 	case 4:
-		cout << "강의 시간 : ";
-		cin >> lectureTime;
+		do
+		{
+			cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
+			cin >> lectureTime;
+		} while (checkTimeStringFormat(lectureTime) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
 		lect.ChangeLectureTime(lectureTime);
 		cout << "변경 완료 " << endl;
 		lect.LectureAllInfoPrint();
@@ -110,6 +114,7 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 	default:
 		cout << "잘못된 코드입니다." << endl;
 	}
+	cout << "--------------------------" << endl;
 }
 
 void LectureHandler::showLectureByProfName(char* profName) const
