@@ -5,6 +5,8 @@
 #include "Lecture.h"
 #include "User.h"
 
+class professor;
+
 using namespace std;
 
 int stringToInteger(char*);		// 입력받은 문자열을 정수로 변환
