@@ -1,4 +1,4 @@
-# CPP-Programming-and-practice-063-2101-TempProject
+# CPP-Programming-and-practice-063-2101
 -------
 * ### 멤버변수 목록
   * <code>Lecture* lectureList</code> : Lecture들을 저장할 수 있는 배열
