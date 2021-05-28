@@ -12,6 +12,7 @@
   * <code>Lecture* findLecture(int) const</code> : 강의코드를 받아서, 해당 강의코드와 일차하는 lecture 클래스 반환. 일치하는 강의가 없으면 NULL반환.
   * <code>Lecture* findLecture(char*) const</code> : 강의명을 받아서, 해당 강의명과 일치하는 lecture 클래스 반환. 일치하는 강의가 없으면 NULL반환. 
   * <code>void showLectureByProfName(char*) const;</code> : 교수명을 받아서, 해당 교수명과 일치하는 강의들을 출력.
+  * <code>int getLectureCount() const;</code> : 현재 저장된 강의 갯수 반환
 ## function.cpp
 ### main()에서 호출될 함수들 목록(LectureHandler를 인자로 받는 것은 실행 테스트 때문, 변경 가능)
 * ### 함수 목록
