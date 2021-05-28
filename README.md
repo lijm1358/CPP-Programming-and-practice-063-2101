@@ -17,6 +17,5 @@
 * ### 함수 목록
   * <code>AddLecture(LectureHandler& lectHdl, professor& prof)</code> : 강의 추가
   * <code>ShowAllLecture(LectureHandler& lectHdl)</code> : 모든 강의 정보 출력
-  * <code>ChangeLectureInfo(LectureHandler& lectHdl, professor& prof)</code> : 인자로 전달받은 professor 클래스가 생성한 Lecture클래스들의 정보 변경
   * <code>AddGrade(LectureHandler& lectHdl, UserHandler& userHdl, professor& prof)</code> : 인자로 전달받은 professor클래스가 생성한 강의, 전체 강의 목록, 전체 사용자 목록 등의 정보를 이용해 학생들의 성적 등록.
 
