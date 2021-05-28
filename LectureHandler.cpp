@@ -24,14 +24,38 @@ void LectureHandler::addLecture(professor& prof)
 	cin >> name;
 	do
 	{
-		cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
-		cin >> time;
-	} while (checkTimeStringFormat(time) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
-	time_cp = new char[time.length() + 1];
-	strcpy(time_cp, time.c_str());
-
-	cout << "수강 제한 인원 : ";
-	cin >> limited;
+		try
+		{
+			cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
+			cin >> time;
+			checkTimeStringFormat(time); // 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
+			time_cp = new char[time.length() + 1];
+			strcpy(time_cp, time.c_str());
+			break;
+		}
+		catch (TimeInputException& e)
+		{
+			e.showExceptionMessage();
+		}
+	} while (true);		
+	do
+	{
+		cin.clear();
+		try
+		{
+			cout << "수강 제한 인원 : ";
+			cin >> limited;
+			if (cin.fail())
+				throw MAX_STRING_LENGTH;
+			break;
+		}
+		catch (int expn)
+		{
+			cin.clear();
+			cin.ignore(expn, '\n');
+			cout << "잘못된 입력입니다." << endl;
+		}
+	} while (true);
 	strcpy(lecturer, prof.get_name());
 	cout << "강의실 : ";
 	cin >> room;
@@ -57,6 +81,7 @@ void LectureHandler::showAllLecture() const
 
 void LectureHandler::changeLectureInfo(Lecture& lect)
 {
+	int out;
 	int lectureCode;
 	int changeCode;
 	char lectName[MAX_STRING_LENGTH];
@@ -94,21 +119,47 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 		lect.LectureAllInfoPrint();
 		break;
 	case 4:
+		out = false;
 		do
 		{
-			cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
-			cin >> lectureTime;
-		} while (checkTimeStringFormat(lectureTime) != 0);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
-		lect.ChangeLectureTime(lectureTime);
-		cout << "변경 완료 " << endl;
-		lect.LectureAllInfoPrint();
+			try
+			{
+				cout << "강의 시간 (24시간, 형식 : HHMM~HHMM): ";
+				cin >> lectureTime;
+				checkTimeStringFormat(lectureTime);
+				lect.ChangeLectureTime(lectureTime);
+				cout << "변경 완료 " << endl;
+				lect.LectureAllInfoPrint();
+				out = true;
+			}
+			catch (TimeInputException& e)
+			{
+				e.showExceptionMessage();
+			}
+		} while (!out);		// 입력받은 강의시간이 형식에 맞는지, 잘못된 점이 없는지 확인.
 		break;
 	case 5:
-		cout << "최대 수강 인원 : ";
-		cin >> maxStudent;
-		lect.ChangeLimitedNum(maxStudent);
-		cout << "변경 완료 " << endl;
-		lect.LectureAllInfoPrint();
+		do
+		{
+			cin.clear();
+			try
+			{
+				cout << "최대 수강 인원 : ";
+				cin >> maxStudent;
+				lect.ChangeLimitedNum(maxStudent);
+				cout << "변경 완료 " << endl;
+				lect.LectureAllInfoPrint();
+				if (cin.fail())
+					throw MAX_STRING_LENGTH;
+				break;
+			}
+			catch (int expn)
+			{
+				cin.clear();
+				cin.ignore(expn, '\n');
+				cout << "잘못된 입력입니다." << endl;
+			}
+		} while (true);
 		break;
 	default:
 		cout << "잘못된 코드입니다." << endl;
@@ -168,26 +219,21 @@ LectureHandler::~LectureHandler()
 	}
 }
 
-int LectureHandler::checkTimeStringFormat(string time)
+// 입력받은 강의 시간 string을 확인, 정해진 형식 및 규칙을 따르는지 확인 (LectureHandler 클래스의p public멤버변수만 사용할 함수이므로 private선언.)
+// HHMM~HHMM 입력이 아닌, 다른 길이의 문자열이나 가운데 문자 ~를 받지 않으면 WrongTimeFormatException 발생
+// H,M이 숫자가 아니면 InvalidTimeValueException발생
+// 0<=HH<=23, 0<=MM<=59범위를 만족하지 않으면 TimeOutofBoundException발생
+// 앞에 입력한 시간보다 뒤에 입력한 시간이 더 앞서있으면 WrongTimeFormatException발생
+void LectureHandler::checkTimeStringFormat(string time)
 {
-	/**************************************************************************************
-	 * 입력받은 강의 시간 string을 확인, 정해진 형식 및 규칙을 따르는지 확인
-	 * 현재 클래스의 addLecture()에서만 사용할 함수이므로 private선언.
-	 *
-	 * 1. HHMM~HHMM 입력이 아닌, 다른 길이의 문자열이나 가운데 문자 ~를 받지 않으면 1을 return
-	 * 2. H,M이 숫자가 아니면 2를 return
-	 * 3. 0<=HH<=23, 0<=MM<=59범위를 만족하지 않으면 3를 return
-	 * 4. 앞에 입력한 시간보다 뒤에 입력한 시간이 더 앞서있으면 4를 return
-	 * ************************************************************************************/
+
 	if (time.length() != 9)
 	{
-		cout << "잘못된 시간 형식입니다." << endl;
-		return 1;
+		throw WrongTimeFormatException();
 	}
 	else if (time.at(4) != '~')
 	{
-		cout << "잘못된 시간 형식입니다." << endl;
-		return 1;
+		throw WrongTimeFormatException();
 	}
 	else
 	{
@@ -195,8 +241,7 @@ int LectureHandler::checkTimeStringFormat(string time)
 		{
 			if (!isdigit(time.at(i)) && (i != 4))
 			{
-				cout << "시간 입력 부분에 숫자가 입력되어야 합니다." << endl;
-				return 2;
+				throw InvalidTimeValueException();
 			}
 		}
 	}
@@ -206,15 +251,12 @@ int LectureHandler::checkTimeStringFormat(string time)
 		stringToInteger(time.substr(2, 2)) < 0 || stringToInteger(time.substr(2, 2)) > 59 ||
 		stringToInteger(time.substr(2, 2)) < 0 || stringToInteger(time.substr(7, 2)) > 59)
 	{
-		cout << "시간 범위가 잘못되었습니다." << endl;
-		return 3;
+		throw TimeOutouBoundException();
 	}
 	else if (stringToInteger(time.substr(0, 4)) >= stringToInteger(time.substr(5, 4)))
 	{
-		cout << "시간 순서가 올바르지 않습니다." << endl;
-		return 4;
+		throw WrongTimeOrderException();
 	}
-	return 0;
 }
 
 int stringToInteger(char* str)
@@ -239,4 +281,24 @@ int stringToInteger(string str)
 		mul *= 10;
 	}
 	return ret;
+}
+
+void WrongTimeFormatException::showExceptionMessage() const
+{
+	cout << "잘못된 시간 형식입니다." << endl;
+}
+
+void InvalidTimeValueException::showExceptionMessage() const
+{
+	cout << "시간 입력 부분에 숫자가 입력되어야 합니다." << endl;
+}
+
+void TimeOutouBoundException::showExceptionMessage() const
+{
+	cout << "시간 범위가 잘못되었습니다." << endl;
+}
+
+void WrongTimeOrderException::showExceptionMessage() const
+{
+	cout << "시간 순서가 올바르지 않습니다." << endl;
 }
