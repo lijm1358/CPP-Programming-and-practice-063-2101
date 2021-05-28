@@ -26,6 +26,7 @@ public:
 	void showAllLecture() const;
 	void changeLectureInfo(Lecture&);
 	void showLectureByProfName(char*) const;
+	int getLectureCount() const;
 	Lecture* findLecture(int) const;
 	Lecture* findLecture(char*) const;
 	~LectureHandler();

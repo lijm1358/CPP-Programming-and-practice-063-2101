@@ -128,6 +128,11 @@ void LectureHandler::showLectureByProfName(char* profName) const
 	}
 }
 
+int LectureHandler::getLectureCount() const
+{
+	return lectureCount;
+}
+
 Lecture* LectureHandler::findLecture(int code) const
 {
 	int i;
