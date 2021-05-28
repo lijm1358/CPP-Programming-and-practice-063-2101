@@ -45,7 +45,7 @@ void AddGrade(LectureHandler& lectHdl, UserHandler& userHdl, professor& prof)
 			studentIdArr = tempLecture->GetStudentID();		//해당 강의로부터 학번 배열 받아온 후 저장
 			studentCount = tempLecture->GetStudentCnt();	//해당 강의로부터 수강중인 학생 수 받아온 후 저장
 			if (studentCount == 0)
-				throw;
+				throw tempLecture->GetLectureName();
 		}
 		catch (int lectCode)
 		{
@@ -55,12 +55,12 @@ void AddGrade(LectureHandler& lectHdl, UserHandler& userHdl, professor& prof)
 		{
 			cout << "강의 \"" << lect->GetLectureName() << "\"는 " << name << "님의 강의가 아닙니다." << endl;
 		}
-		catch (...)
+		catch (char* lectName)
 		{
-			cout << "해당 강의의 수강생이 존재하지 않습니다." << endl;
+			cout << "강의 " << lectName << "의 수강생이 존재하지 않습니다." << endl;
 		}
 	} while (studentCount == 0);
-	
+
 	cout << endl << tempLecture->GetLectureName() << "의 수강생" << endl;
 	for (int i = 0; i < studentCount; i++)
 	{
