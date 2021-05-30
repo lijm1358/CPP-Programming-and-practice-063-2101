@@ -1,8 +1,11 @@
+
 #include <iostream>
+#include <Windows.h>
 #include "LectureHandler.h"
-#include "Lecture.h"
-#include "User.h"
+//#include "Lecture.h"
+//#include "User.h"
 #include "UserHandler.h"
+#include "comn_exception.h"
 
 using namespace std;
 
@@ -16,62 +19,97 @@ void ShowAllLecture(LectureHandler& lectHdl)
 	lectHdl.showAllLecture();
 }
 
-
 void AddGrade(LectureHandler& lectHdl, UserHandler& userHdl, professor& prof)
 {
-	char* name = prof.get_name();			//·Î±×ÀÎ ÇÑ ±³¼ö´ÔÀÇ ÀÌ¸§À» ¹Ş¾Æ¼­ ÀúÀå
+	char* name = prof.get_name();			//ë¡œê·¸ì¸ í•œ êµìˆ˜ë‹˜ì˜ ì´ë¦„ì„ ë°›ì•„ì„œ ì €ì¥
 	int lectCode;
 	int studentCount = 0;
 	int targetStudentId;
 	int targetGrade;
 	int* studentIdArr;
+	int i;
 	Lecture* tempLecture;
 
 	cout << "--------------------------" << endl;
-	cout << name << "´ÔÀÇ °­ÀÇ ¸ñ·Ï" << endl;
-	lectHdl.showLectureByProfName(name);	//¹ŞÀº ±³¼ö´ÔÀÇ ÀÌ¸§°ú ÀÏÄ¡ÇÏ´Â °ú¸ñµéÀ» ÀüºÎ Ãâ·Â
+	cout << name << "ë‹˜ì˜ ê°•ì˜ ëª©ë¡" << endl;
+	lectHdl.showLectureByProfName(name);	//ë°›ì€ êµìˆ˜ë‹˜ì˜ ì´ë¦„ê³¼ ì¼ì¹˜í•˜ëŠ” ê³¼ëª©ë“¤ì„ ì „ë¶€ ì¶œë ¥
 
 	do
 	{
 		try
 		{
-			cout << "À§ÀÇ °­ÀÇ¸ñ·Ï Áß, ¼ºÀû Ã³¸®¸¦ ¿øÇÏ´Â °ú¸ñÀÇ °ú¸ñÄÚµå¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä : ";
-			cin >> lectCode;						//Ãâ·ÂµÈ °ú¸ñµé Áß¿¡¼­ °ú¸ñ ÄÚµå ÀÔ·Â
-			tempLecture = lectHdl.findLecture(lectCode);	//ÀÔ·Â¹ŞÀº ÄÚµå¿¡ ÇØ´çÇÏ´Â °­ÀÇ¸¦ ¹İÈ¯
+			cout << "ìœ„ì˜ ê°•ì˜ëª©ë¡ ì¤‘, ì„±ì  ì²˜ë¦¬ë¥¼ ì›í•˜ëŠ” ê³¼ëª©ì˜ ê³¼ëª©ì½”ë“œë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš” (-1 ì…ë ¥ìœ¼ë¡œ ì·¨ì†Œ) : ";
+			cin >> lectCode;						//ì¶œë ¥ëœ ê³¼ëª©ë“¤ ì¤‘ì—ì„œ ê³¼ëª© ì½”ë“œ ì…ë ¥
+			checkConsoleInput();		// intí˜• ì •ìˆ˜ì— ëŒ€í•œ ì˜ëª»ëœ cin ì²˜ë¦¬
+			if (lectCode == -1)
+			{
+				system("cls");
+				cout << "ë©”ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤." << endl;
+				return;
+			}
+			tempLecture = lectHdl.findLecture(lectCode);	//ì…ë ¥ë°›ì€ ì½”ë“œì— í•´ë‹¹í•˜ëŠ” ê°•ì˜ë¥¼ ë°˜í™˜
 			if (tempLecture == NULL)
-				throw lectCode;
+				throw lectCode;								//í•´ë‹¹ ê³¼ëª©ì´ ì—†ìœ¼ë©´ ì˜ˆì™¸ ë°œìƒ
 			else if (strcmp(tempLecture->GetLecturer(), name))
-				throw tempLecture;
-			studentIdArr = tempLecture->GetStudentID();		//ÇØ´ç °­ÀÇ·ÎºÎÅÍ ÇĞ¹ø ¹è¿­ ¹Ş¾Æ¿Â ÈÄ ÀúÀå
-			studentCount = tempLecture->GetStudentCnt();	//ÇØ´ç °­ÀÇ·ÎºÎÅÍ ¼ö°­ÁßÀÎ ÇĞ»ı ¼ö ¹Ş¾Æ¿Â ÈÄ ÀúÀå
+				throw tempLecture;							//í•´ë‹¹ ê³¼ëª©ì´ ìì‹ ì´ ë§Œë“  ê³¼ëª©ì´ ì•„ë‹ˆë©´ ì˜ˆì™¸ ë°œìƒ
+			studentIdArr = tempLecture->GetStudentID();		//í•´ë‹¹ ê°•ì˜ë¡œë¶€í„° í•™ë²ˆ ë°°ì—´ ë°›ì•„ì˜¨ í›„ ì €ì¥
+			studentCount = tempLecture->GetStudentCnt();	//í•´ë‹¹ ê°•ì˜ë¡œë¶€í„° ìˆ˜ê°•ì¤‘ì¸ í•™ìƒ ìˆ˜ ë°›ì•„ì˜¨ í›„ ì €ì¥
 			if (studentCount == 0)
-				throw tempLecture->GetLectureName();
+				throw tempLecture->GetLectureName();		//í•´ë‹¹ ê³¼ëª©ì„ ë“£ëŠ” í•™ìƒì´ ì—†ìœ¼ë©´ ì˜ˆì™¸ ë°œìƒ
+		}
+		catch (consoleInputFailException& e)
+		{
+			e.clearBuffer();
+			e.showExceptionMessage();
 		}
 		catch (int lectCode)
 		{
-			cout << "°­ÀÇ ÄÚµå " << lectCode << "¿¡ ÇØ´çÇÏ´Â °­ÀÇ°¡ ¾ø½À´Ï´Ù." << endl;
+			cout << "ê°•ì˜ ì½”ë“œ " << lectCode << "ì— í•´ë‹¹í•˜ëŠ” ê°•ì˜ê°€ ì—†ìŠµë‹ˆë‹¤." << endl;
 		}
 		catch (Lecture* lect)
 		{
-			cout << "°­ÀÇ \"" << lect->GetLectureName() << "\"´Â " << name << "´ÔÀÇ °­ÀÇ°¡ ¾Æ´Õ´Ï´Ù." << endl;
+			cout << "ê°•ì˜ \"" << lect->GetLectureName() << "\"ëŠ” " << name << "ë‹˜ì˜ ê°•ì˜ê°€ ì•„ë‹™ë‹ˆë‹¤." << endl;
 		}
 		catch (char* lectName)
 		{
-			cout << "°­ÀÇ " << lectName << "ÀÇ ¼ö°­»ıÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù." << endl;
+			cout << "ê°•ì˜ " << lectName << "ì˜ ìˆ˜ê°•ìƒì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤." << endl;
 		}
 	} while (studentCount == 0);
 
-	cout << endl << tempLecture->GetLectureName() << "ÀÇ ¼ö°­»ı" << endl;
-	for (int i = 0; i < studentCount; i++)
-	{
-		student* tempStudent = static_cast<student*>(userHdl.SearchUser(studentIdArr[i]));
-		cout << "ÀÌ¸§ : " << tempStudent->get_name() << " | ÇĞ¹ø : " << tempStudent->get_ID() << " | Àü°ø : " << tempStudent->get_major() << endl;
-	}
-	cout << "¼ºÀûÀ» µî·ÏÇÒ ÇĞ»ıÀÇ ÇĞ¹øÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä : ";
-	cin >> targetStudentId;
-	cout << "ÇØ´ç ÇĞ»ıÀÇ ¼ºÀûÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä : ";
-	cin >> targetGrade;
-	static_cast<student*>(userHdl.SearchUser(targetStudentId))->Addgrade(targetGrade);
-	cout << "¼ºÀû ÀÔ·Â ¿Ï·á" << endl;
-	cout << "--------------------------" << endl;
+	system("cls");
+	do {
+		try
+		{
+			cout << "----------------------------------------------------------" << endl;
+			cout << tempLecture->GetLectureName() << "ì˜ ìˆ˜ê°•ìƒ" << endl;
+			cout << "----------------------------------------------------------" << endl;
+			for (i = 0; i < studentCount; i++)		//ì°¾ì€ ê°•ì˜ì˜ ìˆ˜ê°•ìƒ ëª©ë¡ ì¶œë ¥
+			{
+				student* tempStudent = static_cast<student*>(userHdl.SearchUser(studentIdArr[i]));
+				cout << "ì´ë¦„ : " << tempStudent->get_name() << " | í•™ë²ˆ : " << tempStudent->get_ID() << " | ì „ê³µ : " << tempStudent->get_major() << endl;
+			}
+			cout << "ì„±ì ì„ ë“±ë¡í•  í•™ìƒì˜ í•™ë²ˆì„ ì…ë ¥í•´ì£¼ì„¸ìš” : ";
+			cin >> targetStudentId;
+			checkConsoleInput();		// intí˜• ì •ìˆ˜ì— ëŒ€í•œ ì˜ëª»ëœ cin ì²˜ë¦¬
+			for (i = 0; i < studentCount && targetStudentId != studentIdArr[i]; i++);	//ì…ë ¥ë°›ì€ í•™ë²ˆì´ ìœ„ì— ë‚˜ì˜¨ ìˆ˜ê°•ìƒ ëª©ë¡ì— í¬í•¨ëœ í•™ìƒì¸ì§€ ê²€ì‚¬.
+			if (i == studentCount)
+				throw targetStudentId;
+			cout << "í•´ë‹¹ í•™ìƒì˜ ì„±ì ì„ ì…ë ¥í•´ì£¼ì„¸ìš” : ";
+			cin >> targetGrade;
+			checkConsoleInput();		// intí˜• ì •ìˆ˜ì— ëŒ€í•œ ì˜ëª»ëœ cin ì²˜ë¦¬
+			static_cast<student*>(userHdl.SearchUser(targetStudentId))->Addgrade(targetGrade);
+			system("cls");
+			cout << "ì„±ì  ì…ë ¥ ì™„ë£Œ" << endl;
+			break;
+		}
+		catch (consoleInputFailException& e)
+		{
+			e.clearBuffer();
+			e.showExceptionMessage();
+		}
+		catch (int id)
+		{
+			cout << id << "ì— í•´ë‹¹í•˜ëŠ” í•™ìƒì´ ì—†ê±°ë‚˜, " << id << "ì— í•´ë‹¹í•˜ëŠ” í•™ìƒì€ í•´ë‹¹ ìˆ˜ì—…ì„ ë“£ì§€ ì•ŠëŠ” í•™ìƒì…ë‹ˆë‹¤." << endl;
+		}
+	} while (true);
 }

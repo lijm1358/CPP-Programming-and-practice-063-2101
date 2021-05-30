@@ -1,7 +1,10 @@
 ﻿#include <iostream>
 #include <cctype>
 #include <string>
+#include <Windows.h>
 #include "LectureHandler.h"
+#include "User.h"
+#include "comn_exception.h"
 
 #define MAX_STRING_LENGTH 100
 
@@ -19,7 +22,7 @@ void LectureHandler::addLecture(professor& prof)
 	char* time_cp;
 
 	//Lecture(const char* name, const char* lecturer, const char* room, int code, double time, int limited);
-	cout << "--------------------------" << endl;
+	cout << "----------------------------------------------" << endl;
 	cout << "강의명 : ";
 	cin >> name;
 	do
@@ -45,8 +48,6 @@ void LectureHandler::addLecture(professor& prof)
 		{
 			cout << "수강 제한 인원 : ";
 			cin >> limited;
-			if (cin.fail())
-				throw MAX_STRING_LENGTH;
 			break;
 		}
 		catch (int expn)
@@ -64,7 +65,7 @@ void LectureHandler::addLecture(professor& prof)
 	lectureCodeSequence++;
 	lectureCount++;
 	cout << endl << "과목 추가 완료" << endl;
-	cout << "--------------------------" << endl;
+	cout << "----------------------------------------------" << endl;
 	delete[] time_cp;
 }
 
@@ -92,8 +93,14 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 
 	lect.LectureAllInfoPrint();
 
-	cout << "--------------------------" << endl;
-	cout << "바꿀 강의 정보 (1. 강의이름 2. 교수 3. 강의실 4. 강의 시간 5. 최대 수강 인원) : ";
+	//cout << "바꿀 강의 정보 (1. 강의이름 2. 교수 3. 강의실 4. 강의 시간 5. 최대 수강 인원) : ";
+	cout << "바꿀 강의 정보를 입력해주세요." << endl;
+	cout << "1. 강의 이름" << endl;
+	cout << "2. 교수" << endl;
+	cout << "3. 강의실" << endl;
+	cout << "4. 강의 시간" << endl;
+	cout << "5. 최대 수강 인원" << endl;
+	cout << "선택 : ";
 	cin >> changeCode;
 	switch (changeCode)
 	{
@@ -149,22 +156,19 @@ void LectureHandler::changeLectureInfo(Lecture& lect)
 				lect.ChangeLimitedNum(maxStudent);
 				cout << "변경 완료 " << endl;
 				lect.LectureAllInfoPrint();
-				if (cin.fail())
-					throw MAX_STRING_LENGTH;
+				checkConsoleInput();
 				break;
 			}
-			catch (int expn)
+			catch (consoleInputFailException& e)
 			{
-				cin.clear();
-				cin.ignore(expn, '\n');
-				cout << "잘못된 입력입니다." << endl;
+				e.clearBuffer();
+				e.showExceptionMessage();
 			}
 		} while (true);
 		break;
 	default:
 		cout << "잘못된 코드입니다." << endl;
 	}
-	cout << "--------------------------" << endl;
 }
 
 void LectureHandler::showLectureByProfName(char* profName) const

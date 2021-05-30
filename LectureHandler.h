@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Lecture.h"
-#include "User.h"
+//#include "User.h"
 
 class professor;
 
